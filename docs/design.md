@@ -1,5 +1,21 @@
 # Design Log
 
+## Define v1 API contracts for channels, videos, and user events
+- Status: accepted
+- Area: server
+- Decision: establish explicit request/response and validation contracts before route implementation.
+- Context: recommendation behavior depends on event integrity and consistent feed payloads.
+- Options:
+  - A: write contracts first as docs, TypeScript types, and JSON Schemas.
+  - B: implement handlers first and infer contracts later.
+- Tradeoffs:
+  - Pros: reduces ambiguity, enables faster implementation and testing, and prevents payload drift.
+  - Cons: may require contract updates when implementation details evolve.
+- Follow-up:
+  - wire these schemas into Fastify route validation in the next implementation slice
+  - add contract tests to enforce parity between docs and runtime
+- References: `server/contracts/api-contracts.md`
+
 ## Use PostgreSQL for v1 recommendation graph modeling
 - Status: accepted
 - Area: server

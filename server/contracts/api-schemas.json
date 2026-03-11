@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nodus.app/contracts/api-schemas.json",
+  "title": "nodus API request schemas",
+  "type": "object",
+  "properties": {
+    "followChannelRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["youtubeChannelId"],
+      "properties": {
+        "youtubeChannelId": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 64
+        }
+      }
+    },
+    "saveVideoRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["youtubeVideoId"],
+      "properties": {
+        "youtubeVideoId": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 32
+        }
+      }
+    },
+    "recordEventRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["videoId", "eventType", "value", "clientTs"],
+      "properties": {
+        "videoId": { "type": "string", "minLength": 1 },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "watch_start",
+            "watch_progress",
+            "complete",
+            "like",
+            "skip",
+            "save"
+          ]
+        },
+        "value": { "type": "number" },
+        "clientTs": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "eventType": { "const": "watch_progress" } },
+            "required": ["eventType"]
+          },
+          "then": {
+            "properties": {
+              "value": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          },
+          "else": {
+            "properties": { "value": { "const": 1 } }
+          }
+        }
+      ]
+    },
+    "recordEventsBatchRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["events"],
+      "properties": {
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": { "$ref": "#/$defs/recordEventRequest" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "recordEventRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["videoId", "eventType", "value", "clientTs"],
+      "properties": {
+        "videoId": { "type": "string", "minLength": 1 },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "watch_start",
+            "watch_progress",
+            "complete",
+            "like",
+            "skip",
+            "save"
+          ]
+        },
+        "value": { "type": "number" },
+        "clientTs": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "eventType": { "const": "watch_progress" } },
+            "required": ["eventType"]
+          },
+          "then": {
+            "properties": {
+              "value": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          },
+          "else": {
+            "properties": { "value": { "const": 1 } }
+          }
+        }
+      ]
+    }
+  }
+}
