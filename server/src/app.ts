@@ -11,7 +11,7 @@ export async function buildServer(env: AppEnv = readEnv()): Promise<FastifyInsta
     }
   });
 
-  await registerPlugins(app);
+  await registerPlugins(app, env);
   await registerRoutes(app, env.apiPrefix);
 
   return app;

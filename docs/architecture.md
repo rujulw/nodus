@@ -44,6 +44,13 @@ Contract source of truth:
 5. Explainability:
    - top score contributors returned per item
 
+## Metadata Ingestion Layer
+
+- Service: `server/src/youtube/metadata-ingestion-service.ts`
+- Client: `server/src/youtube/youtube-client.ts`
+- Cache: `server/src/cache/lru-ttl-cache.ts` and `server/src/youtube/metadata-cache.ts`
+- Runtime: Fastify plugin decorates `youtubeIngestionService` when `YOUTUBE_API_KEY` is configured.
+
 ## Data Model
 
 Core tables:
