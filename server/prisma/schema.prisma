@@ -1,0 +1,186 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EventType {
+  WATCH_START    @map("watch_start")
+  WATCH_PROGRESS @map("watch_progress")
+  COMPLETE       @map("complete")
+  LIKE           @map("like")
+  SKIP           @map("skip")
+  SAVE           @map("save")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  events            UserEvent[]
+  creatorAffinities UserCreatorAffinity[]
+  topicWeights      UserTopicWeight[]
+  algorithmProfiles AlgorithmProfile[]
+  followedChannels  FollowedChannel[]
+  watchedVideos     WatchedVideo[]
+
+  @@map("users")
+}
+
+model Channel {
+  id               String   @id @default(cuid())
+  youtubeChannelId String   @unique @map("youtube_channel_id")
+  name             String
+  avatarUrl        String?  @map("avatar_url")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  videos            Video[]
+  creatorAffinities UserCreatorAffinity[]
+  followers         FollowedChannel[]
+
+  @@map("channels")
+}
+
+model Video {
+  id             String   @id @default(cuid())
+  youtubeVideoId String   @unique @map("youtube_video_id")
+  channelId      String   @map("channel_id")
+  title          String
+  description    String   @default("")
+  publishedAt    DateTime @map("published_at")
+  durationSeconds Int     @map("duration_seconds")
+  thumbnailUrl   String   @map("thumbnail_url")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  channel      Channel      @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  topics       VideoTopic[]
+  events       UserEvent[]
+  watchedBy    WatchedVideo[]
+
+  @@index([channelId])
+  @@index([publishedAt])
+  @@map("videos")
+}
+
+model Topic {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  videos      VideoTopic[]
+  userWeights UserTopicWeight[]
+
+  @@map("topics")
+}
+
+model VideoTopic {
+  videoId String @map("video_id")
+  topicId String @map("topic_id")
+  weight  Float  @default(1)
+
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([videoId, topicId])
+  @@index([topicId])
+  @@map("video_topics")
+}
+
+model UserEvent {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  videoId   String    @map("video_id")
+  eventType EventType @map("event_type")
+  value     Float
+  clientTs  DateTime  @map("client_ts")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([videoId, createdAt])
+  @@index([eventType])
+  @@map("user_events")
+}
+
+model UserCreatorAffinity {
+  userId    String  @map("user_id")
+  channelId String  @map("channel_id")
+  score     Float   @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@id([userId, channelId])
+  @@index([channelId])
+  @@map("user_creator_affinity")
+}
+
+model UserTopicWeight {
+  userId    String  @map("user_id")
+  topicId   String  @map("topic_id")
+  score     Float   @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([userId, topicId])
+  @@index([topicId])
+  @@map("user_topic_weights")
+}
+
+model AlgorithmProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @map("user_id")
+  profileName         String   @map("profile_name")
+  novelty             Float    @default(0.5)
+  diversity           Float    @default(0.5)
+  recencyBias         Float    @default(0.5) @map("recency_bias")
+  longVideoPreference Float    @default(0.5) @map("long_video_preference")
+  exportedJson        Json?    @map("exported_json")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("algorithm_profiles")
+}
+
+model FollowedChannel {
+  userId    String   @map("user_id")
+  channelId String   @map("channel_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@id([userId, channelId])
+  @@index([channelId])
+  @@map("followed_channels")
+}
+
+model WatchedVideo {
+  userId    String   @map("user_id")
+  videoId   String   @map("video_id")
+  watchedAt DateTime @default(now()) @map("watched_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  video Video @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@id([userId, videoId])
+  @@index([videoId])
+  @@index([watchedAt])
+  @@map("watched_videos")
+}
