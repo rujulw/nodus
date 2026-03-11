@@ -1,0 +1,52 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Node / TypeScript
+node_modules/
+dist/
+build/
+.next/
+coverage/
+*.tsbuildinfo
+
+# Package managers
+.pnpm-store/
+.npm/
+.yarn/
+
+# Server
+server/node_modules/
+server/dist/
+server/coverage/
+server/.turbo/
+
+# Client
+client/node_modules/
+client/dist/
+client/coverage/
+client/.vite/
+
+# Database
+*.sqlite
+*.sqlite-journal
+prisma/dev.db*
+
+# Misc
+.cache/
+tmp/
