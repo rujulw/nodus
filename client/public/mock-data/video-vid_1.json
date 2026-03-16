@@ -1,0 +1,15 @@
+{
+  "id": "vid_1",
+  "youtubeVideoId": "dQw4w9WgXcQ",
+  "channelId": "chan_1",
+  "title": "Never Gonna Give You Up - Explainable Recommend",
+  "description": "The classic. This is a mock video to verify that your front-end feed page and card layout are rendering data correctly.\n\nEnjoy the embedded player test stream.",
+  "publishedAt": "2026-03-16T12:00:00Z",
+  "durationSeconds": 212,
+  "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+  "topics": [
+    { "slug": "music", "weight": 0.9 },
+    { "slug": "retro", "weight": 0.8 }
+  ],
+  "explanation": ["Hits high-affinity topic: Music", "Recent popular upload"]
+}

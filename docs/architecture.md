@@ -10,6 +10,24 @@ nodus is a full-stack TypeScript application that ingests YouTube metadata, trac
 - Server: Fastify API for auth, metadata ingestion, event persistence, profile serialization, and recommendation generation.
 - Shared contracts: Typed REST payloads for videos, events, ranked feed items, and profile JSON.
 
+## Client Information Architecture & Routes
+
+The React client shell defines three primary route boundaries under a shared `AppShell` layout (providing global navigation via `AppNav` and content constraints via `PageLayout`):
+
+1. **`/` (FeedPage)**
+   - Renders a ranked video feed with modes (`for_you` | `explore`)
+   - Accepts user interactions (like, skip, save) handled via event dispatch
+   - Data dependency: `GET /api/v1/videos/feed`
+
+2. **`/watch/:videoId` (WatchPage)**
+   - Manages an embedded YouTube player (`youtube-nocookie.com`)
+   - Dispatches timeline events (`watch_start`, `watch_progress`, `complete`) automatically
+   - Provides sidebar controls for manual interaction logic
+   - Data dependency: `GET /api/v1/videos/:videoId`
+
+3. **`*` (NotFoundPage)**
+   - Boundary for unhandled routes and 404 fallbacks
+
 Contract source of truth:
 
 - `server/contracts/api-contracts.md`
