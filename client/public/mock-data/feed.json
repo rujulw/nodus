@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "id": "vid_1",
+      "youtubeVideoId": "dQw4w9WgXcQ",
+      "channelId": "chan_1",
+      "title": "Never Gonna Give You Up - Explainable Recommend",
+      "description": "The classic. This is a mock video to verify that your front-end feed page and card layout are rendering data correctly.",
+      "publishedAt": "2026-03-16T12:00:00Z",
+      "durationSeconds": 212,
+      "thumbnailUrl": "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      "topics": [
+        { "slug": "music", "weight": 0.9 },
+        { "slug": "retro", "weight": 0.8 }
+      ],
+      "explanation": ["Hits high-affinity topic: Music", "Recent popular upload"]
+    },
+    {
+      "id": "vid_2",
+      "youtubeVideoId": "9bZkp7q19f0",
+      "channelId": "chan_2",
+      "title": "PSY - GANGNAM STYLE(강남스타일) M/V",
+      "description": "Another massive hit. Test item #2 to ensure the feed grid adjusts responsively.",
+      "publishedAt": "2026-03-15T12:00:00Z",
+      "durationSeconds": 252,
+      "thumbnailUrl": "https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg",
+      "topics": [
+        { "slug": "pop", "weight": 0.9 }
+      ],
+      "explanation": ["Popular in your region"]
+    }
+  ],
+  "nextCursor": null
+}

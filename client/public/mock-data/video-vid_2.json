@@ -1,0 +1,14 @@
+{
+  "id": "vid_2",
+  "youtubeVideoId": "9bZkp7q19f0",
+  "channelId": "chan_2",
+  "title": "PSY - GANGNAM STYLE(강남스타일) M/V",
+  "description": "Another massive hit. Test item #2 to ensure the watch page renders its content completely.",
+  "publishedAt": "2026-03-15T12:00:00Z",
+  "durationSeconds": 252,
+  "thumbnailUrl": "https://img.youtube.com/vi/9bZkp7q19f0/hqdefault.jpg",
+  "topics": [
+    { "slug": "pop", "weight": 0.9 }
+  ],
+  "explanation": ["Popular in your region"]
+}
